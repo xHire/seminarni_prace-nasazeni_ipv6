@@ -1,0 +1,104 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage{a4wide}
+\linespread{1,5}	% 1,5 řádkování
+\usepackage[hmargin={3cm,2cm},vmargin={2.5cm,2.5cm},includeheadfoot]{geometry}
+
+%\usepackage{alltt}
+%\usepackage{indentfirst}
+%\usepackage{subfigure}
+%\usepackage{float}
+%\frenchspacing
+%\usepackage{lmodern}	% moderní font
+
+% hezká záhlaví
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+% nastavení
+\setcounter{chapter}{-1}	% aby úvod byl 0
+
+% vlastní makro
+\newcommand{\kapitola}[1]{
+	\refstepcounter{chapter}
+	\lhead{\thechapter. #1}
+	\rhead{Michal Zima}
+	\typeout{\chaptername\space\thechapter.}
+	\chapter*{\protect\thechapter\hspace{0.75em} #1}
+	\addcontentsline{toc}{chapter} {
+		\protect\numberline{\thechapter}#1
+	}
+}
+
+% data do titulky
+\title{Nasazení IPv6 v praxi}
+\author{Michal Zima}
+\date{}
+
+\begin{document}
+% titulka
+\maketitle
+\setcounter{page}{2}	% titulka se prý má také počítat...
+
+% titulní list?
+
+% prohlášení, místo a datum
+\thispagestyle{empty}
+Prohlašuji, že jsem svou seminární práci napsal samostatně a výhradně s použitím citovaných pramenů. Souhlasím se zapůjčováním práce a jejím zveřejňováním v souladu s licencí Creative Commons Attribution-Share Alike.
+
+\bigskip	% vynechá řádek
+\noindent V Třebíči dne \today \hspace{\fill}Michal Zima
+\newpage{}
+
+% zadání
+
+% anotace/abstrakt - odborný souhrn nejdůležitějších myšlenek (dvojjazyčně)
+\thispagestyle{plain}
+\section*{Nasazení IPv6 v praxi\\Implementation of IPv6 in use}
+\subsection*{Anotace}
+Seminární práce se zabývá problematikou nasazení technologie IPv6 do reálného prostředí tak, aby se eliminovalo použití staré technologie IPv4 uvnitř malých sítí. Cílem je usnadnit pozdější přechod celosvětového Internetu na tuto novou technologii.
+\subsection*{Anotation}
+Abstract labour deals with problematic of implementation IPv6 technology into real environment so that use of old IPv4 technology would be eliminated. The goal is to make easier further transforming worldwide Internet to this new technology.
+% seznam klíčových slov (dvojjazyčně)
+\subsection*{Klíčová slova}
+Internet, IPv4, IPv6
+\subsection*{Keywords}
+Internet, IPv4, IPv6
+\newpage{}
+
+% úvod
+
+% obsah
+\lhead{Obsah}
+\rhead{Michal Zima}
+\tableofcontents
+\newpage
+
+% vlastní text práce
+\kapitola{Úvod}
+Lorem ipsum dolor sit amet...
+\newpage{}
+
+\kapitola{Výhody a nevýhody IPv6}
+Jako každá technologie, tak i IPv6 má své výhody i nevýhody, které nelze nezmínit.
+\section{Výhody}
+\section{Nevýhody}
+\newpage{}
+
+\kapitola{Důvody nasazení IPv6}
+\newpage{}
+
+\kapitola{Předpoklady nasazení IPv6}
+\newpage{}
+
+\kapitola{Proces nasazení IPv6}
+\section{Přivedení IPv6 konektivity}
+\section{Problémy se samostatnou IPv6 adresací}
+\section{IPv6 kompatibilní DNS cache}
+\section{Převaděč IPv6 na IPv4 a naopak}
+\section{Nepokryté oblasti}
+\newpage{}
+
+\end{document}
