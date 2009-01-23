@@ -1,6 +1,6 @@
 \documentclass[12pt]{report}
 \usepackage[utf8x]{inputenc}
-\usepackage[czech]{babel}
+\usepackage[myczech]{babel}
 \usepackage{a4wide}
 \linespread{1,5}		% 1,5 řádkování
 \usepackage[hmargin={3cm,2cm},vmargin={2.5cm,2.5cm},includeheadfoot]{geometry}
@@ -9,11 +9,12 @@
 % hezká záhlaví
 \usepackage{fancyhdr}
 \pagestyle{fancy}
+\setlength{\headheight}{15pt}
 
 % nastavení
 \setcounter{chapter}{-1}	% aby úvod byl 0
 
-% vlastní makro
+% vlastní makra
 \newcommand{\kapitola}[1]{
 	\refstepcounter{chapter}
 	\lhead{\thechapter. #1}
@@ -24,6 +25,7 @@
 		\protect\numberline{\thechapter}#1
 	}
 }
+\newcommand\uv[1]{\quotedblbase #1\textquotedblleft}
 
 % data do titulky
 \title{Nasazení IPv6 v praxi}
@@ -50,18 +52,20 @@ Prohlašuji, že jsem svou seminární práci napsal samostatně a výhradně s 
 % anotace/abstrakt - odborný souhrn nejdůležitějších myšlenek (dvojjazyčně)
 \thispagestyle{plain}
 \section*{Nasazení IPv6 v praxi\\Implementation of IPv6 in use}
+
 \subsection*{Anotace}
 Seminární práce se zabývá problematikou nasazení technologie IPv6 do reálného prostředí tak, aby se eliminovalo použití staré technologie IPv4 uvnitř malých sítí. Cílem je usnadnit pozdější přechod celosvětového Internetu na tuto novou technologii.
+
 \subsection*{Anotation}
 Abstract labour deals with problematic of implementation IPv6 technology into real environment so that use of old IPv4 technology would be eliminated. The goal is to make easier further transforming worldwide Internet to this new technology.
+
 % seznam klíčových slov (dvojjazyčně)
 \subsection*{Klíčová slova}
-Internet, IPv4, IPv6
-\subsection*{Keywords}
-Internet, IPv4, IPv6
-\newpage{}
+Internet, IPv4, IPv6, NAT, IP Maškaráda, TCP, UDP, ICMP, tunelování
 
-% úvod
+\subsection*{Keywords}
+Internet, IPv4, IPv6, NAT, IP Masquerading, TCP, UDP, ICMP, tunneling
+\newpage{}
 
 % obsah
 \lhead{Obsah}
@@ -71,31 +75,51 @@ Internet, IPv4, IPv6
 
 % vlastní text práce
 \kapitola{Úvod}
-Než se ponořím do nového světa IPv6, tak bych se pár slovy zmínil o mé motivaci, která mě vedla k napsání této práce. IPv6 už je na světě velmi dlouho (první koncepty se objevily již v devadesátých letech), ale přesto je jeho produkční nasazení spíše sporadické nebo jen jako vedlejší. Přitom situace na poli IPv4 není růžová - nyní, na počátku roku 2009, nám zbývá již jen něco kolem půl miliardy volných IPv4 adres.
+Všechno na světě se vyvíjí a nejinak je tomu s počítačovými technologiemi -- konkrétně tedy se sítěmi a Internetem. Přenosové rychlosti úspěšně rostou, množství přenesených dat též. S tím souvisí i nárůst počtu připojených serverů a klientů do této sítě. Jenže servery potřebují \uv{být vidět}. Řada klientů zase chce \uv{být vidět}. Musí tedy mít veřejně routovatelnou IP adresu. Protokol IP ve verzi 4 má své mantinely ve formě 32 bitů, a přes ty se již nelze znovu přehoupnout (poprvé to bylo učiněno maškarádou, ale pouze za předpokladu, že klienti, kteří za ní budou schovaní, nebudou chtít být vidět), a proto na ně pomalu začínáme narážet. Řešením je pouze přechod na novou verzi IP protokolu, a to na verzi 6.
+
+IPv6 je na světě již poměrně dlouho -- první koncepty se objevily již v devadesátých letech, ale přesto je jeho produkční nasazení zatím spíše ojedinělé, příp. se jedná o paralelní nasazení současně s IPv4. Přitom situace ve světě IPv4 není zrovna růžová -- nyní, na počátku roku 2009, nám zbývá již jen něco kolem půl miliardy volných IPv4 adres. A víc jich nebude -- budou již jen ubývat. Je možné předpokládat, že čím méně jich bude, tím více se budou společnosti snažit jich co nejvíce získat. Efekt davové paniky.
+
+Je potřeba zajistit, aby lidé začali přecházet -- čím dříve, tím lépe. I kdyby nasazovali IPv6 pouze jako technologii doplňující stávající IPv4, byl by to pokrok. Ovšem stále by správci sítí museli udržovat a spravovat staré IPv4, takže by si práci neušetřili, ba naopak by jim práce přibylo zhruba dvojnásobně. U velkých sítích tedy nelze hledat řešení v této cestě. Je potřeba nasadit čisté IPv6 se vším, co přináší, a využít tak všech jeho výhod naplno. Je samozřejmé, že je potřeba ještě nějaký čas zajišťovat klientům přístup do IPv4 Internetu, takže celý přechod nebude zas až tak jednoduchý. Ovšem jde to, a to je to hlavní, a proto nám již nic nebrání IPv6 plně nasadit.
+
+IPv6 je velkou výzvou, a proto jsem se rozhodl tento nový protokol v domácí síti nasadit. A to bez sekundance staré IPv4. Ačkoliv by se to na první pohled mohlo jevit jako velmi snadný úkol, nebylo to tak docela triviální. Veškeré své postřehy, nabyté zkušenosti i řešení nastalých problémů shrnuji v této seminární práci.
 \newpage{}
 
 \kapitola{Výhody a nevýhody IPv6}
 Jako každá technologie, tak i IPv6 má své výhody i nevýhody, které nelze nezmínit.
+
 \section{Výhody}
 Mezi hlavní výhody této verze Internetového Protokolu patří především nesrovnatelně vyšší adresní rozsah, který lze použít. Namísto $2^{32}$ IPv4 adres najednou získáváme $2^{128}$ IPv6 adres. Tolik proklínaná maškaráda (běžněji známá jako tzv. NAT) se může velmi jednoduše stát minulostí.
 
-IPv6 protokol klade menší nároky na výpočetní výkon routerů, a to hned z několika důvodů: jednak není potřeba provádět maškarádu (překlad adres), a za další se pakety po cestě nefragmentují, takže routery nemusí pokaždé přepočítávat kontrolní součty (paket buď projde nebo bude zahozen - samozřejmě s odesláním příslušného informačního ICMP paketu odesílateli).
+IPv6 má velmi dobře vyřešenou schopnost autokonfigurace koncových klientů, takže v~mnoha případech odpadá (na první pohled) složitá konfigurace a vše funguje prakticky okamžitě -- stačí nastavit router.
+
+IPv6 protokol klade menší nároky na výpočetní výkon routerů, a to hned z několika důvodů: jednak není potřeba provádět maškarádu (překlad adres), a za další se pakety po cestě nefragmentují, takže routery nemusí pokaždé přepočítávat kontrolní součty (paket buď projde nebo bude zahozen -- samozřejmě s odesláním příslušného informačního ICMP paketu odesílateli).
+
 \section{Nevýhody}
+Již od pohledu je na IPv6 vidět, že má velmi dlouhé adresy, a tím pádem i mnohem hůře zapamatovatelné než mělo IPv4. Je to daň za 128 bitů, ale vzhledem k možnosti zkracování (vynechávání počátečních nul v jednotlivých blocích, příp. vypouštění nulových bloků) je adresa často daleko jednodušší.
+
+Řada základních programů pro práci se sítí není s IPv6 přímo kompatibilní, a proto vznikly \uv{šestkové} verze těchto programů, přičemž jim byla přidána šestka na konec názvu, např. \textit{ping6}, \textit{traceroute6}. Někdy stará verze programu zastará a je jednoduše nahrazena novější, která IPv6 umí. V případě programu \textit{ifconfig} došlo přímo k nahrazení jiným programem (\textit{ip}) z balíku \textit{iproute2}.
+
 IPv6 protokol má trošku větší hlavičku protokolu, a to o 20 B, což není moc, když vezmeme v úvahu, že potřebný datový prostor vzrostl o 24 B. Je tedy vidět, že formát hlavičky má za sebou pročištění a značné zjednodušení.
 \newpage{}
 
 \kapitola{Důvody nasazení IPv6}
-Podle odhadů společnosti Intec NetCore, Inc. dojde adresní rozsah IPv4 na začátku roku 2011. Svět má tedy přibližně dva roky, aby se plně připravil na IPv6. V případě ignorování této "hrozby" je možné očekávat vážné problémy.
+Podle odhadů společnosti Intec NetCore, Inc. dojde adresní rozsah IPv4 na začátku roku 2011. Svět má tedy přibližně dva roky, aby se plně připravil na IPv6. V případě ignorování této \uv{hrozby} je možné očekávat vážné problémy.
 \newpage{}
 
 \kapitola{Předpoklady nasazení IPv6}
-Základním předpokladem pro nasazení IPv6 je IPv6 kompatibilní operační systém. GNU/Linuxové systémy tuto podmínku bez výhrad splňují. Operační systém Microsoft Windows musí být nejméně ve verzi Vista, protože žádná z předchozích verzí nemá použitelnou implementaci nové verze IP.
+\section{Operační systém}
+Základním předpokladem pro úspěšné nasazení IPv6 je IPv6 kompatibilní operační systém. GNU/Linuxové systémy tuto podmínku bez výhrad splňují. Stejně tak u Mac OS X a ostatních BSD systému není s nasazením IPv6 nejmenší problém s kompatibilitou. Pouze operační systém Microsoft Windows musí být nejméně ve verzi Vista, protože žádná z předchozích verzí nemá použitelnou implementaci nové verze IP.
+
+\section{Aplikace}
 \newpage{}
 
 \kapitola{Proces nasazení IPv6}
 \section{Přivedení IPv6 konektivity}
-V praxi jsou nejčastější dva způsoby přivedené IPv6 konektivity. Jednou možností je požádat stávajícího ISP o přidělení IPv6 rozsahu. Druhou pak zaregistrování IPv6 tunelu. Jelikož je získání IPv6 rozsahu od ISP mnohdy velmi problematické (např. z toho důvodu, že sám IPv6 nemá implementováno) a silně individuální, budu se dále věnovat jen "tunelování".
+V praxi jsou nejčastější dva způsoby přivedené IPv6 konektivity. Jednou možností je požádat stávajícího ISP o přidělení IPv6 rozsahu. Druhou pak zaregistrování IPv6 tunelu. Jelikož je získání IPv6 rozsahu od ISP mnohdy velmi problematické (např. z toho důvodu, že sám IPv6 nemá implementováno) a silně individuální, budu se dále věnovat jen \uv{tunelování}.
+
 \subsection{Zřízení IPv6 tunelu}
+Existuje velké množství firem, které se rozhodly zdarma poskytovat plnohodnotné IPv6 tunely. V základu se takto dá \uv{pořídit} konektivita např. do Německa s velice slušnými odezvami (cca o 30 ms vyšší než normálně) a prefixem /64, příp. i /48. Při malém nasazení či při nepoužití automatické konfigurace skrze NDP pakety typu Router Advertisiment člověk bohatě vystačí i s daleko menším prefixem než je /64, a proto považuji /48 prakticky za zbytečný.
+
 \section{Problémy se samostatnou IPv6 adresací}
 \section{IPv6 kompatibilní DNS cache}
 \section{Převaděč IPv6 na IPv4 a naopak}

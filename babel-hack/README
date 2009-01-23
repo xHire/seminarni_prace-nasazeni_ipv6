@@ -1,0 +1,1 @@
+Move these three files into /usr/share/texmf/tex/generic/babel/. If your path is different, please hack babel.sty and fix the path on line 70.
