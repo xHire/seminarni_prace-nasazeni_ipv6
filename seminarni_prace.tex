@@ -85,21 +85,33 @@ IPv6 je velkou výzvou, a proto jsem se rozhodl tento nový protokol v domácí 
 \newpage{}
 
 \kapitola{Výhody a nevýhody IPv6}
-Jako každá technologie, tak i IPv6 má své výhody i nevýhody, které nelze nezmínit.
+Ačkoliv je IPv6 nástupcem za starou verzi 4, nepřináší pouze výhody, ale oproti \uv{čtyřce} má i pár nevýhod. A na některé vlastnosti tohoto protokolu lze pro změnu nahlížet jako na výhodu i nevýhodu.
 
 \section{Výhody}
-Mezi hlavní výhody této verze Internetového Protokolu patří především nesrovnatelně vyšší adresní rozsah, který lze použít. Namísto $2^{32}$ IPv4 adres najednou získáváme $2^{128}$ IPv6 adres. Tolik proklínaná maškaráda (běžněji známá jako tzv. NAT) se může velmi jednoduše stát minulostí.
+\subsection{Velké množství adres}
+Mezi hlavní výhody této verze \textit{Internetového Protokolu} patří především nesrovnatelně vyšší adresní rozsah, který lze použít. Namísto $2^{32}$ IPv4 adres najednou získáváme $2^{128}$ IPv6 adres. Tolik proklínaná maškaráda (běžněji známá jako tzv. NAT) se může velmi jednoduše stát minulostí.
 
+\subsection{Autokonfigurace klientů}
 IPv6 má velmi dobře vyřešenou schopnost autokonfigurace koncových klientů, takže v~mnoha případech odpadá (na první pohled) složitá konfigurace a vše funguje prakticky okamžitě -- stačí nastavit router.
 
+\subsection{Menší nároky na výkon}
 IPv6 protokol klade menší nároky na výpočetní výkon routerů, a to hned z několika důvodů: jednak není potřeba provádět maškarádu (překlad adres), a za další se pakety po cestě nefragmentují, takže routery nemusí pokaždé přepočítávat kontrolní součty (paket buď projde nebo bude zahozen -- samozřejmě s odesláním příslušného informačního ICMP paketu odesílateli).
 
+\subsection{Zjednodušení hlavičky}
+Hlavička IPv6 protokolu prošla přísnou revizí a mnoho zbytečných polí bylo odstraněno nebo nahrazeno -- z původních 12 zbylo pouze 8. Je to dáno také tím, že se o něco méně počítá s fragmentací paketů (neboť ji provádí pouze odesílatel), takže ta je přesunuta do rozšiřujících hlaviček.
+
 \section{Nevýhody}
+\subsection{Horší zapamatovatelnost adres}
 Již od pohledu je na IPv6 vidět, že má velmi dlouhé adresy, a tím pádem i mnohem hůře zapamatovatelné než mělo IPv4. Je to daň za 128 bitů, ale vzhledem k možnosti zkracování (vynechávání počátečních nul v jednotlivých blocích, příp. vypouštění nulových bloků) je adresa často daleko jednodušší.
 
+\subsection{Obtížnější boj se SPAMmery}
+Mnohem více adres globálně znamená i mnohem více adres na osobu. Tedy i SPAMmeři jich dostanou obrovské množství. Bohužel se tím značně ztíží efektivita jejich blokování podle IP adres -- jedinou možností, jak se s tím vypořádat, je začít blokovat celé subnety i s tím rizikem, že tím mohou být postiženi i slušní uživatelé.
+
+\subsection{Nutnost nových utilit}
 Řada základních programů pro práci se sítí není s IPv6 přímo kompatibilní, a proto vznikly \uv{šestkové} verze těchto programů, přičemž jim byla přidána šestka na konec názvu, např. \textit{ping6}, \textit{traceroute6}. Někdy stará verze programu zastará a je jednoduše nahrazena novější, která IPv6 umí. V případě programu \textit{ifconfig} došlo přímo k nahrazení jiným programem (\textit{ip}) z balíku \textit{iproute2}.
 
-IPv6 protokol má trošku větší hlavičku protokolu, a to o 20 B, což není moc, když vezmeme v úvahu, že potřebný datový prostor vzrostl o 24 B. Je tedy vidět, že formát hlavičky má za sebou pročištění a značné zjednodušení.
+\subsection{Větší IP hlavička}
+IPv6 protokol má trošku větší hlavičku protokolu, a to o 20 B, což není moc, když vezmeme v úvahu, že potřebný datový prostor vzrostl o 24 B. Je tedy vidět, že formát hlavičky má za sebou pročištění a značné zjednodušení. Teoreticky by mohl v důsledku větší hlavičky trochu narůst globální traffic, ale ten poroste spíše z jiných důvodů.
 \newpage{}
 
 \kapitola{Důvody nasazení IPv6}
