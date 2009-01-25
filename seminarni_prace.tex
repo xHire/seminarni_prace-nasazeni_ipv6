@@ -135,9 +135,24 @@ Je až s podivem, že se přechody na novou verzi málokdo zabývá. Přitom mot
 
 \kapitola{Předpoklady nasazení IPv6}
 \section{Operační systém}
-Základním předpokladem pro úspěšné nasazení IPv6 je IPv6 kompatibilní operační systém. GNU/Linuxové systémy tuto podmínku bez výhrad splňují. Stejně tak u Mac OS X a ostatních BSD systému není s nasazením IPv6 nejmenší problém s kompatibilitou. Pouze operační systém Microsoft Windows musí být nejméně ve verzi Vista, protože žádná z předchozích verzí nemá použitelnou implementaci nové verze IP.
+Základním předpokladem pro úspěšné nasazení IPv6 je vlastnictví IPv6 kompatibilního operačního systému. To je základ, bez kterého se za žádných okolností neobejdeme. Příslušná IPv6 konektivita je vždy až na druhém místě, stejně tak podpora IPv6 v aplikacích či síťových prvcích.
+
+\subsection{GNU/Linux}
+GNU/Linux byl vůbec první operační systém na světě, který IPv6 implementoval, a to již v roce 1996 ve verzi 2.1.8. Status experimentální implementace byl odstraněn v roce 2005 ve verzi 2.6.12. Od té doby je IPv6 plně podporované a funkční.
+
+\subsection{Apple Mac OS X a jiné BSD systémy}
+Do BSD systémů byla již v roce 2000 zařazena kvalitní implementace IPv6 projektu KAME, který byl započat roku 1998. Následně od roku 2003 je v Apple Mac OS X ve~výchozím nastavení IPv6 zapnuté.
+
+\subsection{Microsoft Windows}
+Ačkoliv začal Microsoft na podpoře IPv6 pracovat již v roce 1998, implementaci vhodnou do produkčního nasazení uvedl až ve verzi Vista v roce 2007. Napůl funkční implementace se též nachází v XP SP1 až SP3 z roku 2002, ovšem v praxi jí nelze využít, pokud klient současně nemá k dispozici i staré IPv4.
 
 \section{Aplikace}
+V případě, že klient má kompatibilní operační systém, zbývá ověřit podporu IPv6 v~samotných aplikacích. Většina moderních programů, které ke svému provozu potřebují připojení k Internetu, či které jsou na něm přímo postavené, dnes IPv6 podporují nebo mají alespoň své alternativy. Řádově slabší je ovšem situace okolo síťových her. Málokterá hra umí své datové toky řídit i na IPv6. Natož pak umožnit vytvoření herního serveru na IPv6, na který by se mohli hráči s IPv6 připojovat. Pro náruživé hráče může tento fakt znamenat jasné rozhodnutí mezi starým IPv4 a novým IPv6.
+
+\section{Síťové prvky}
+Možnost nativního nasazení IPv6 (tedy bez nutnosti tunelovat každého jednotlivého klienta) velmi často stojí a padá na jeho podpoře v aktivních síťových prvcích -- především pak routerech. Zvláště zařízení staršího data, která dlouho řadu let spolehlivě slouží svému původnímu účelu, se neumí vypořádat s IPv6, což činí síť z hlediska IPv6 nepoužitelnou.
+
+U zařízení některých výrobců je možnost nahrát nový systém (\textit{firmware}), který již má podporu IPv6 implementovanou. U starších zařízení je takovýto firmware velmi často neoficiální a výrobcem nepodporovaný (a především nedoporučovaný). Přesto je to mnohdy jediné možné řešení, pomineme-li nákup nového zařízení.
 \newpage{}
 
 \kapitola{Proces nasazení IPv6}
