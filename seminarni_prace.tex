@@ -164,7 +164,6 @@ V praxi jsou nejčastější dva způsoby přivedení IPv6 konektivity, přičem
 \subsection{Zřízení IPv6 tunelu}
 Existuje velké množství firem, které se rozhodly zdarma poskytovat plnohodnotné IPv6 tunely (jsou to tzv. \uv{tunnel brokeři}). V základu se takto dá \uv{pořídit} konektivita např. do Německa (není mi známo, že by v České republice existoval veřejně přístupný tunnel broker) s velice slušnými odezvami (cca o 30 ms vyšší než normálně) a prefixem /64, příp. i /48. Pro malé nasazení považuji prefix /48 za zbytečný, protože pro automatickou bezstavovou konfiguraci /64 stačí. Při manuální konfiguraci či při použití DHCPv6 je i takto velký prefix naprosto nevyužitelný a v praxi by stačil i prefix o velikosti /120.
 
-\subsubsection{Registrace}
 Tunnel brokerů je velké množství, přičemž já se budu zabývat pouze jedním, a to společností \textit{Hurricane Electric}, která provozuje \textit{http://www.tunnelbroker.net/}. Registrace je velmi rychlá a jednoduchá.
 
 \begin{enumerate}
@@ -175,18 +174,35 @@ Tunnel brokerů je velké množství, přičemž já se budu zabývat pouze jedn
 \item Hotovo. Náš tunel je připravený k použití.
 \end{enumerate}
 
-\subsubsection{Nastavení klientského počítače}
+\subsection{Nastavení klientského počítače}
 Na stránce s detaily tunelu se úplně dole skrývá \uv{Example OS Configurations} -- stačí tedy jen vybrat požadovaný operační systém a získáme přesné a hlavně personalizované nastavení, přesně krok za krokem. Nutno však podotknout, že se toto nastavení po restartu vrátí zpět (tedy se zruší), takže je velmi vhodné napsat si skript, který se při startu systému vždy spustí a toto nastavení obnoví.
 
-\subsubsection{Otestování funkčnosti}
+\subsection{Otestování funkčnosti}
 Nejlepší na otestování funkčnosti či nefunkčnosti tunelu, je program \textit{ping}, resp. jeho \uv{šestková} verze, \textit{ping6}. Jako první je dobré zkusit adresu \uv{Server IPv6 address} uvedenou na webu a následně adresu známého serveru, např. \textit{nic.cz}, \textit{ipv6.google.com} atd.
 
 \section{Problémy s čistě IPv6 adresací}
 Nasazení čistého IPv6 do dnešního internetového prostředí má několik málo překážek. Hned první je potřeba IPv6 DNS cache serveru, který bude zajišťovat v novém prostředí správný překlad doménových jmen na IP adresy. Druhý, ale řádově závažnější, problém je s nepřístupností stávajícího IPv4 Internetu v takové síti. IPv6 není zpětně kompatibilní s~IPv4 v takovém měřítku, aby bylo možné přistupovat z IPv6 do IPv4. Tento problém byl až dosud zcela zásadní otázkou u všech firem i ISP, kteří o \uv{výměně} za novou verzi protokolu uvažovali.
 
 \section{IPv6 kompatibilní DNS cache}
-\section{Převaděč IPv6 na IPv4 a naopak}
+\subsection{Klasická DNS cache}
+Pokud člověk do sítě implementuje \uv{obyčejné} IPv6, může použít prakticky jakýkoliv IPv6 kompatibilní DNS server s podporou cachování. Jedním z možných kandidátů je například \textit{BIND}. Vzhledem k tomu, že veškeré technologické novinky jsou většinou implementovány v~BINDu jako první, tak i IPv6 plně podporuje.
+
+\subsection{DNS cache s podporou speciální translace}
+Já jsem ovšem šel dále než běžná řešení a naprogramoval jsem si vlastní DNS server, který jednak zprostředkovává překlad doménových jmen, ale především slouží jako prostředek ke~zprovoznění translace IPv6 do IPv4, kterou se zabývám v následující podkapitole. Tento server je součástí mého projektu \textit{WrapSix}.
+
+\subsubsection{Základní princip}
+Pokud se klient DNS serveru dotáže na obyčejný A záznam (tedy IPv4 adresu doménového jména), chová se tento server zcela podle očekávání. Pokud se dotáže na AAAA záznam (tedy IPv6 adresu doménového jména), a tento existuje, tak ho podle očekávání vrátí. Pokud ovšem nastane situace, kdy se klient dotáže na AAAA záznam, který neexistuje, tak se server přeptá i na A záznam -- pokud existuje, tak ho přeloží do potřebného formátu a vloží na konec nastaveného IPv6 prefixu.
+
+\subsubsection{Výsledný efekt}
+Ve výsledku tedy klient vždy (pokud je daný server dostupný) na požadavek o AAAA záznam tento záznam obdrží a bude tedy veškerý svůj provoz směrovat po novém IPv6. Díky tomu je možné IPv4 uvnitř sítě zcela vypustit.
+
+\section{Překlad IPv6 na IPv4 a zpět}
+Aby bylo výše uvedené řešení plně funkční, je potřeba dodat ještě druhý článek, druhou část WrapSixu. Tato druhá část se chová jako překladač IPv6 provozu, který přijde na~adresu z nastaveného IPv6 prefixu, do starého IPv4 (z toho vyplývá, že nutně potřebuje jeho existenci~-- např. na samotné hranici sítě). Případný vracející se IPv4 provoz správně vrací příslušným klientům uvnitř IPv6.
+
+Díky tomuto řešení je opravdu možné IPv4 uvnitř sítě vypnout. Zajišťuje naprostou připravenost sítě na příchod čistého IPv6 Internetu a globálního vypnutí IPv4. Odfiltruje totiž IPv6 nekompatibilní operační systémy, aplikace i nevyhovující síťové prvky. Firmy, ISP i všichni lidé díky tomu mají možnost se přizpůsobit budoucím podmínkám postupně, rozložit investice raději do delšího časového horizontu, než poté chtít vše stihnout na poslední chvíli, kdy již bude éra IPv4 na pokraji své existence.
+
 \section{Nepokryté oblasti}
+Přesto toto řešení ještě není kompletní. Řada aplikací, ale především her, se připojuje přímo na IPv4 adresy serverů -- vynechává tedy mezikrok překladu doménového jména. Zatím tato oblast zůstává otevřená, ale brzy i ji WrapSix zaplní a vytvoří tak kompletní řešení pro každého (vzhledem k jeho svobodné open-source licenci).
 \newpage{}
 
 \end{document}
