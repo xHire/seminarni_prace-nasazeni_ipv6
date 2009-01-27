@@ -157,12 +157,33 @@ U zařízení některých výrobců je možnost nahrát nový systém (\textit{f
 
 \kapitola{Proces nasazení IPv6}
 \section{Přivedení IPv6 konektivity}
-V praxi jsou nejčastější dva způsoby přivedené IPv6 konektivity. Jednou možností je požádat stávajícího ISP o přidělení IPv6 rozsahu. Druhou pak zaregistrování IPv6 tunelu. Jelikož je získání IPv6 rozsahu od ISP mnohdy velmi problematické (např. z toho důvodu, že sám IPv6 nemá implementováno) a silně individuální, budu se dále věnovat jen \uv{tunelování}.
+Provozovat čistou IPv6 lze i bez internetové IPv6 konektivity, ale v takovém případě si člověk říká o problémy. Řada aplikací totiž při existenci IPv6 v síti předpokládá funkčnost této sítě a preferuje ji před IPv4.
+
+V praxi jsou nejčastější dva způsoby přivedení IPv6 konektivity, přičemž jejich rozšíření se liší od segmentu nasazení. Jednou z možností je požádat stávajícího ISP o přidělení IPv6 rozsahu. Tato možnost se u běžných ISP příliš nevyskytuje, takže lidé šahají po druhé možnosti. Tou je registrace IPv6 vlastního tunelu. Tunelování se naopak v praxi téměř nevyužívá v~serverovém segmentu, protože většina datacenter již vlastní nativní IPv6 konektivitou disponuje. Z řečeného vyplývá, že běžný uživatel bude přivedení IPv6 konektivity řešit tunelem, a proto se této problematice budu dále věnovat.
 
 \subsection{Zřízení IPv6 tunelu}
-Existuje velké množství firem, které se rozhodly zdarma poskytovat plnohodnotné IPv6 tunely. V základu se takto dá \uv{pořídit} konektivita např. do Německa s velice slušnými odezvami (cca o 30 ms vyšší než normálně) a prefixem /64, příp. i /48. Při malém nasazení či při nepoužití automatické konfigurace skrze NDP pakety typu Router Advertisiment člověk bohatě vystačí i s daleko menším prefixem než je /64, a proto považuji /48 prakticky za zbytečný.
+Existuje velké množství firem, které se rozhodly zdarma poskytovat plnohodnotné IPv6 tunely (jsou to tzv. \uv{tunnel brokeři}). V základu se takto dá \uv{pořídit} konektivita např. do Německa (není mi známo, že by v České republice existoval veřejně přístupný tunnel broker) s velice slušnými odezvami (cca o 30 ms vyšší než normálně) a prefixem /64, příp. i /48. Pro malé nasazení považuji prefix /48 za zbytečný, protože pro automatickou bezstavovou konfiguraci /64 stačí. Při manuální konfiguraci či při použití DHCPv6 je i takto velký prefix naprosto nevyužitelný a v praxi by stačil i prefix o velikosti /120.
 
-\section{Problémy se samostatnou IPv6 adresací}
+\subsubsection{Registrace}
+Tunnel brokerů je velké množství, přičemž já se budu zabývat pouze jedním, a to společností \textit{Hurricane Electric}, která provozuje \textit{http://www.tunnelbroker.net/}. Registrace je velmi rychlá a jednoduchá.
+
+\begin{enumerate}
+\item Nejprve vyplníme registrační formulář na adrese \textit{http://tunnelbroker.net/register.php}, a to pravdivými údaji, a především platnou e-mailovou adresou.
+\item Na zadaný e-mail nám obratem přijde potvrzení registrace i s potřebným loginem a heslem.
+\item Přihlásíme se.
+\item Zažádáme o vytvoření tunelu na adrese \textit{http://tunnelbroker.net/ipv6\_normal.php} pod odkazem \uv{Create Regular Tunnel}. Vyplníme zde naši veřejnou IPv4 adresu a vybereme vhodný server pro druhý konec našeho tunelu. Doporučuje se vybrat ten, co je geograficky nejblíže, ale nemusí to platit vždy (důležité jsou odezvy -- čím menší, tím lepší), ovšem pro Českou republiku to bude vždy nějaký evropský server.
+\item Hotovo. Náš tunel je připravený k použití.
+\end{enumerate}
+
+\subsubsection{Nastavení klientského počítače}
+Na stránce s detaily tunelu se úplně dole skrývá \uv{Example OS Configurations} -- stačí tedy jen vybrat požadovaný operační systém a získáme přesné a hlavně personalizované nastavení, přesně krok za krokem. Nutno však podotknout, že se toto nastavení po restartu vrátí zpět (tedy se zruší), takže je velmi vhodné napsat si skript, který se při startu systému vždy spustí a toto nastavení obnoví.
+
+\subsubsection{Otestování funkčnosti}
+Nejlepší na otestování funkčnosti či nefunkčnosti tunelu, je program \textit{ping}, resp. jeho \uv{šestková} verze, \textit{ping6}. Jako první je dobré zkusit adresu \uv{Server IPv6 address} uvedenou na webu a následně adresu známého serveru, např. \textit{nic.cz}, \textit{ipv6.google.com} atd.
+
+\section{Problémy s čistě IPv6 adresací}
+Nasazení čistého IPv6 do dnešního internetového prostředí má několik málo překážek. Hned první je potřeba IPv6 DNS cache serveru, který bude zajišťovat v novém prostředí správný překlad doménových jmen na IP adresy. Druhý, ale řádově závažnější, problém je s nepřístupností stávajícího IPv4 Internetu v takové síti. IPv6 není zpětně kompatibilní s~IPv4 v takovém měřítku, aby bylo možné přistupovat z IPv6 do IPv4. Tento problém byl až dosud zcela zásadní otázkou u všech firem i ISP, kteří o \uv{výměně} za novou verzi protokolu uvažovali.
+
 \section{IPv6 kompatibilní DNS cache}
 \section{Převaděč IPv6 na IPv4 a naopak}
 \section{Nepokryté oblasti}
