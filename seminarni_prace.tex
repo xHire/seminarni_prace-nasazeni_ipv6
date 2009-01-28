@@ -131,7 +131,7 @@ Již od pohledu je na IPv6 vidět, že má velmi dlouhé adresy, a tím pádem i
 Řada základních programů pro práci se sítí není s IPv6 přímo kompatibilní, a proto vznikly \uv{šestkové} verze těchto programů, přičemž jim byla přidána šestka na konec názvu, např. \textit{ping6}, \textit{traceroute6}. Někdy stará verze programu zastará a je jednoduše nahrazena novější, která IPv6 umí. V případě programu \textit{ifconfig} došlo přímo k nahrazení jiným programem (\textit{ip}) z balíku \textit{iproute2}.
 
 \subsection{Větší IP hlavička}
-IPv6 protokol má trošku větší hlavičku protokolu, a to o 20 B, což není moc, když vezmeme v úvahu, že potřebný datový prostor hlavičky vzrostl o 24 B (na 40 B z 16 u IPv4). Je tedy vidět, že formát hlavičky má za sebou pročištění a značné zjednodušení. Teoreticky by mohl v důsledku větší hlavičky trochu narůst globální traffic, ale ten poroste spíše z jiných důvodů.
+IPv6 protokol má trošku větší hlavičku protokolu, a to o 20 B (na 40 B z 20 B u IPv4), což není moc, když vezmeme v úvahu, že potřebný datový prostor jen pro IP adresy vzrostl o 24 B. Je tedy vidět, že formát hlavičky má za sebou pročištění a značné zjednodušení. Teoreticky by mohl v důsledku větší hlavičky trochu narůst globální traffic, ale ten poroste spíše z jiných důvodů.
 \newpage{}
 
 \kapitola{Důvody nasazení IPv6}
