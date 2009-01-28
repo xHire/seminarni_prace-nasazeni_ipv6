@@ -27,17 +27,40 @@
 }
 \newcommand\uv[1]{\quotedblbase #1\textquotedblleft}
 
-% data do titulky
-\title{Nasazení IPv6 v praxi}
-\author{Michal Zima}
-\date{}
 
 \begin{document}
-% titulka
-\maketitle
-\setcounter{page}{2}	% titulka se prý má také počítat...
 
-% titulní list?
+% titulní list
+\thispagestyle{empty}
+\begin{titlepage}
+\begin{center}
+
+%\vspace{100mm}
+\ \\
+\ \\
+\ \\
+\ \\
+\ \\
+
+{\Large\bf Seminární práce}
+
+\vspace{10mm}
+
+{\Huge\bf Nasazení IPv6 v praxi}\\
+
+\end{center}
+
+\vspace{\fill}
+
+{\large
+\noindent Gymnázium Třebíč\\
+\noindent Michal Zima, 4.B\\
+\noindent Třebíč 2009\\
+\noindent Vedoucí práce: Pavel Šimerda\\
+}
+
+\end{titlepage}
+\setcounter{page}{2}  % titulka se prý má také počítat...
 
 % prohlášení, místo a datum
 \thispagestyle{empty}
@@ -57,14 +80,14 @@ Prohlašuji, že jsem svou seminární práci napsal samostatně a výhradně s 
 Seminární práce se zabývá problematikou nasazení technologie IPv6 do reálného prostředí tak, aby se eliminovalo použití staré technologie IPv4 uvnitř malých sítí. Cílem je usnadnit pozdější přechod celosvětového Internetu na tuto novou technologii.
 
 \subsection*{Anotation}
-Abstract labour deals with problematic of implementation IPv6 technology into real environment so that use of old IPv4 technology would be eliminated. The goal is to make easier further transforming worldwide Internet to this new technology.
+Abstract paper deals with IPv6 technology deployment strategy into real environment so that the use of old IPv4 technology is eliminated. The goal is to make further transformation of worldwide Internet to this new technology easier.
 
 % seznam klíčových slov (dvojjazyčně)
 \subsection*{Klíčová slova}
-Internet, IPv4, IPv6, NAT, IP Maškaráda, TCP, UDP, ICMP, tunelování
+Internet, IPv4, IPv6, NAT, IP Maškaráda, TCP, UDP, ICMP, tunelování, WrapSix, DNS, překlad IPv6 do IPv4
 
 \subsection*{Keywords}
-Internet, IPv4, IPv6, NAT, IP Masquerading, TCP, UDP, ICMP, tunneling
+Internet, IPv4, IPv6, NAT, IP Masquerading, TCP, UDP, ICMP, tunneling, WrapSix, DNS, IPv6 to IPv4 translation
 \newpage{}
 
 % obsah
@@ -104,14 +127,11 @@ Hlavička IPv6 protokolu prošla přísnou revizí a mnoho zbytečných polí by
 \subsection{Horší zapamatovatelnost adres}
 Již od pohledu je na IPv6 vidět, že má velmi dlouhé adresy, a tím pádem i mnohem hůře zapamatovatelné než mělo IPv4. Je to daň za 128 bitů, ale vzhledem k možnosti zkracování (vynechávání počátečních nul v jednotlivých blocích, příp. vypouštění nulových bloků) je adresa často daleko jednodušší.
 
-\subsection{Obtížnější boj se SPAMmery}
-Mnohem více adres globálně znamená i mnohem více adres na osobu. Tedy i SPAMmeři jich dostanou obrovské množství. Bohužel se tím značně ztíží efektivita jejich blokování podle IP adres -- jedinou možností, jak se s tím vypořádat, je začít blokovat celé subnety i s tím rizikem, že tím mohou být postiženi i slušní uživatelé.
-
 \subsection{Nutnost nových utilit}
 Řada základních programů pro práci se sítí není s IPv6 přímo kompatibilní, a proto vznikly \uv{šestkové} verze těchto programů, přičemž jim byla přidána šestka na konec názvu, např. \textit{ping6}, \textit{traceroute6}. Někdy stará verze programu zastará a je jednoduše nahrazena novější, která IPv6 umí. V případě programu \textit{ifconfig} došlo přímo k nahrazení jiným programem (\textit{ip}) z balíku \textit{iproute2}.
 
 \subsection{Větší IP hlavička}
-IPv6 protokol má trošku větší hlavičku protokolu, a to o 20 B, což není moc, když vezmeme v úvahu, že potřebný datový prostor vzrostl o 24 B. Je tedy vidět, že formát hlavičky má za sebou pročištění a značné zjednodušení. Teoreticky by mohl v důsledku větší hlavičky trochu narůst globální traffic, ale ten poroste spíše z jiných důvodů.
+IPv6 protokol má trošku větší hlavičku protokolu, a to o 20 B, což není moc, když vezmeme v úvahu, že potřebný datový prostor hlavičky vzrostl o 24 B (na 40 B z 16 u IPv4). Je tedy vidět, že formát hlavičky má za sebou pročištění a značné zjednodušení. Teoreticky by mohl v důsledku větší hlavičky trochu narůst globální traffic, ale ten poroste spíše z jiných důvodů.
 \newpage{}
 
 \kapitola{Důvody nasazení IPv6}
@@ -141,7 +161,7 @@ Základním předpokladem pro úspěšné nasazení IPv6 je vlastnictví IPv6 ko
 GNU/Linux byl vůbec první operační systém na světě, který IPv6 implementoval, a to již v roce 1996 ve verzi 2.1.8. Status experimentální implementace byl odstraněn v roce 2005 ve verzi 2.6.12. Od té doby je IPv6 plně podporované a funkční.
 
 \subsection{Apple Mac OS X a jiné BSD systémy}
-Do BSD systémů byla již v roce 2000 zařazena kvalitní implementace IPv6 projektu KAME, který byl započat roku 1998. Následně od roku 2003 je v Apple Mac OS X ve~výchozím nastavení IPv6 zapnuté.
+Do BSD systémů byla již v roce 2000 zařazena kvalitní implementace IPv6 projektu KAME, který byl započat roku 1998. Od roku 2003 je pak v Apple Mac OS X ve~výchozím nastavení IPv6 zapnuté.
 
 \subsection{Microsoft Windows}
 Ačkoliv začal Microsoft na podpoře IPv6 pracovat již v roce 1998, implementaci vhodnou do produkčního nasazení uvedl až ve verzi Vista v roce 2007. Napůl funkční implementace se též nachází v XP SP1 až SP3 z roku 2002, ovšem v praxi jí nelze využít, pokud klient současně nemá k dispozici i staré IPv4.
@@ -162,7 +182,7 @@ Provozovat čistou IPv6 lze i bez internetové IPv6 konektivity, ale v takovém 
 V praxi jsou nejčastější dva způsoby přivedení IPv6 konektivity, přičemž jejich rozšíření se liší od segmentu nasazení. Jednou z možností je požádat stávajícího ISP o přidělení IPv6 rozsahu. Tato možnost se u běžných ISP příliš nevyskytuje, takže lidé šahají po druhé možnosti. Tou je registrace IPv6 vlastního tunelu. Tunelování se naopak v praxi téměř nevyužívá v~serverovém segmentu, protože většina datacenter již vlastní nativní IPv6 konektivitou disponuje. Z řečeného vyplývá, že běžný uživatel bude přivedení IPv6 konektivity řešit tunelem, a proto se této problematice budu dále věnovat.
 
 \subsection{Zřízení IPv6 tunelu}
-Existuje velké množství firem, které se rozhodly zdarma poskytovat plnohodnotné IPv6 tunely (jsou to tzv. \uv{tunnel brokeři}). V základu se takto dá \uv{pořídit} konektivita např. do Německa (není mi známo, že by v České republice existoval veřejně přístupný tunnel broker) s velice slušnými odezvami (cca o 30 ms vyšší než normálně) a prefixem /64, příp. i /48. Pro malé nasazení považuji prefix /48 za zbytečný, protože pro automatickou bezstavovou konfiguraci /64 stačí. Při manuální konfiguraci či při použití DHCPv6 je i takto velký prefix naprosto nevyužitelný a v praxi by stačil i prefix o velikosti /120.
+Existuje velké množství firem, které se rozhodly zdarma poskytovat plnohodnotné IPv6 tunely (jsou to tzv. \uv{tunnel brokeři}). V základu se takto dá \uv{pořídit} konektivita např. do Německa (není mi známo, že by v České republice existoval veřejně přístupný tunnel broker) s velice slušnými odezvami (cca o 30 ms vyšší než je běžné přes IPv4) a prefixem /64 (to znamená $128-64=64$ bitů pro vlastní adresy, což je $2^{64}=1,8*10^{19}$; jinak řečeno prefix znamená, kolik bitů z adresy je fixně daných od poskytovatele), příp. i /48. Pro malé nasazení považuji prefix /48 za zbytečný, protože pro automatickou bezstavovou konfiguraci /64 stačí. Při manuální konfiguraci či při použití DHCPv6 je i takto velký prefix naprosto nevyužitelný a v praxi by stačil i prefix o velikosti /120.
 
 Tunnel brokerů je velké množství, přičemž já se budu zabývat pouze jedním, a to společností \textit{Hurricane Electric}, která provozuje \textit{http://www.tunnelbroker.net/}. Registrace je velmi rychlá a jednoduchá.
 
@@ -178,7 +198,7 @@ Tunnel brokerů je velké množství, přičemž já se budu zabývat pouze jedn
 Na stránce s detaily tunelu se úplně dole skrývá \uv{Example OS Configurations} -- stačí tedy jen vybrat požadovaný operační systém a získáme přesné a hlavně personalizované nastavení, přesně krok za krokem. Nutno však podotknout, že se toto nastavení po restartu vrátí zpět (tedy se zruší), takže je velmi vhodné napsat si skript, který se při startu systému vždy spustí a toto nastavení obnoví.
 
 \subsection{Otestování funkčnosti}
-Nejlepší na otestování funkčnosti či nefunkčnosti tunelu, je program \textit{ping}, resp. jeho \uv{šestková} verze, \textit{ping6}. Jako první je dobré zkusit adresu \uv{Server IPv6 address} uvedenou na webu a následně adresu známého serveru, např. \textit{nic.cz}, \textit{ipv6.google.com} atd.
+Nejlepší na otestování funkčnosti či nefunkčnosti tunelu je program \textit{ping6}. Jako první je dobré zkusit adresu \uv{Server IPv6 address} uvedenou na webu a následně adresu známého serveru, např. \textit{nic.cz}, \textit{ipv6.google.com} atd.
 
 \section{Problémy s čistě IPv6 adresací}
 Nasazení čistého IPv6 do dnešního internetového prostředí má několik málo překážek. Hned první je potřeba IPv6 DNS cache serveru, který bude zajišťovat v novém prostředí správný překlad doménových jmen na IP adresy. Druhý, ale řádově závažnější, problém je s nepřístupností stávajícího IPv4 Internetu v takové síti. IPv6 není zpětně kompatibilní s~IPv4 v takovém měřítku, aby bylo možné přistupovat z IPv6 do IPv4. Tento problém byl až dosud zcela zásadní otázkou u všech firem i ISP, kteří o \uv{výměně} za novou verzi protokolu uvažovali.
@@ -187,8 +207,8 @@ Nasazení čistého IPv6 do dnešního internetového prostředí má několik m
 \subsection{Klasická DNS cache}
 Pokud člověk do sítě implementuje \uv{obyčejné} IPv6, může použít prakticky jakýkoliv IPv6 kompatibilní DNS server s podporou cachování. Jedním z možných kandidátů je například \textit{BIND}. Vzhledem k tomu, že veškeré technologické novinky jsou většinou implementovány v~BINDu jako první, tak i IPv6 plně podporuje.
 
-\subsection{DNS cache s podporou speciální translace}
-Já jsem ovšem šel dále než běžná řešení a naprogramoval jsem si vlastní DNS server, který jednak zprostředkovává překlad doménových jmen, ale především slouží jako prostředek ke~zprovoznění translace IPv6 do IPv4, kterou se zabývám v následující podkapitole. Tento server je součástí mého projektu \textit{WrapSix}.
+\subsection{DNS cache s podporou speciálního překladu adres}
+Já jsem ovšem šel dále než běžná řešení a naprogramoval jsem si vlastní DNS server, který jednak zprostředkovává překlad doménových jmen, ale především slouží jako prostředek ke~zprovoznění překladu IPv6 do IPv4, kterou se zabývám v následující podkapitole. Tento server je součástí mého vlastního projektu \textit{WrapSix} (jeho domovská stránka je \textit{http://wrapsix.tuxportal.cz/}).
 
 \subsubsection{Základní princip}
 Pokud se klient DNS serveru dotáže na obyčejný A záznam (tedy IPv4 adresu doménového jména), chová se tento server zcela podle očekávání. Pokud se dotáže na AAAA záznam (tedy IPv6 adresu doménového jména), a tento existuje, tak ho podle očekávání vrátí. Pokud ovšem nastane situace, kdy se klient dotáže na AAAA záznam, který neexistuje, tak se server přeptá i na A záznam -- pokud existuje, tak ho přeloží do potřebného formátu a vloží na konec nastaveného IPv6 prefixu.
@@ -201,8 +221,42 @@ Aby bylo výše uvedené řešení plně funkční, je potřeba dodat ještě dr
 
 Díky tomuto řešení je opravdu možné IPv4 uvnitř sítě vypnout. Zajišťuje naprostou připravenost sítě na příchod čistého IPv6 Internetu a globálního vypnutí IPv4. Odfiltruje totiž IPv6 nekompatibilní operační systémy, aplikace i nevyhovující síťové prvky. Firmy, ISP i všichni lidé díky tomu mají možnost se přizpůsobit budoucím podmínkám postupně, rozložit investice raději do delšího časového horizontu, než poté chtít vše stihnout na poslední chvíli, kdy již bude éra IPv4 na pokraji své existence.
 
+\section{Alternativy}
+Alternativou k mému řešení je například dvojice \textit{pTRTd} a \textit{totd}, ovšem oba projekty jsou již téměř 10 let \uv{mrtvé} (tedy se již vůbec nevyvíjí a z dnešhí pohledu je lze považovat za zastaralé -- IPv6 se za 10 přecijen trochu hnulo). Další alternativy mi nejsou známy -- to je hlavní důvod, proč jsem se pustil do vlastního řešení.
+
 \section{Nepokryté oblasti}
 Přesto toto řešení ještě není kompletní. Řada aplikací, ale především her, se připojuje přímo na IPv4 adresy serverů -- vynechává tedy mezikrok překladu doménového jména. Zatím tato oblast zůstává otevřená, ale brzy i ji WrapSix zaplní a vytvoří tak kompletní řešení pro každého (vzhledem k jeho svobodné open-source licenci).
 \newpage{}
+
+\kapitola{Závěr}
+Ačkoliv je na našem Internetu IPv6 zatím vzácnější technologií, začíná se blýskat na lepší časy -- serverů dostupných po IPv6 pomalu přibývá. Je potřeba prolomit začarovaný kruh a na jedné či druhé straně (tedy na serverech či u klientů) začít více masově prosazovat nasazení IPv6 -- tím by se i druhá strana donutila k jeho nasazení a situace by se najednou mohla začít silně zlepšovat.
+
+Klíčovým řešením by mohl být právě přechod firem a ISP na čistě IPv6 vnitřní sítě s~překladem do IPv4 (ať už prostřednictvím WrapSixu či jiného, alternativního řešení). Kromě toho, že by se zvedla používanost IPv6 přípojek serverů, vytvořila by se přirozená motivace zmíněná výše.
+
+IPv6 je protokol odstraňující mnoho nedostatků svého předchůdce IPv4, který tak dláždí cestu lepším možnostem využití Internetu pro koncové uživatele, stejně tak poskytuje moderní prostředky umožňující prakticky neomezené rozpínání našeho stávajícího Internetu. Měl by proto být brán vážně a nasazován tak rychle, jak jen bude možné.
+\newpage{}
+
+\addcontentsline{toc}{chapter}{Literatura}
+\begin{thebibliography}{1}
+\bibitem{}
+	{\em RFC 2460: Internet Protocol, Version 6 (IPv6) Specification.}
+	{[online]. IETF, 1998. Dostupný z WWW: $<$http://tools.ietf.org/html/rfc2460$>$.}
+\bibitem{}
+	{\em RFC 791: INTERNET PROTOCOL, DARPA INTERNET PROGRAM, PROTOCOL SPECIFICATION.}
+	{[online]. IETF, 1981. Dostupný z WWW: $<$http://tools.ietf.org/html/rfc791$>$.}
+\bibitem{}
+	{ŠIMERDA, Pavel.}
+	{\em IPv6 - nový Internet.}
+	{AbcLinuxu [online]. 2008. Dostupný z WWW: $<$http://www.abclinuxu.cz/clanky/site/ipv6-novy-internet$>$. ISSN 1214-1267.}
+\bibitem{}
+	{\em IPv6}
+	{[online]. Wikimedia Foundation, 2001-2009, 28. ledna 2009 [cit. 2009-01-28]. En. Dostupný z WWW: $<$http://en.wikipedia.org/wiki/Ipv6$>$.}
+\bibitem{}
+	{\em IPv6.cz}
+	{[online]. 2008-2009 [cit. 2009-01-28]. Dostupný z WWW: $<$https://www.ipv6.cz/$>$.}
+\bibitem{}
+	{\em IPv4 Exhaustion Counter}
+	{[online]. Intec NetCore, 2009 [cit. 2009-01-28]. Dostupný z~WWW: $<$http://inetcore.com/project/ipv4ec/index\_en.html$>$.}
+\end{thebibliography}
 
 \end{document}
