@@ -37,14 +37,11 @@
 
 %\vspace{100mm}
 \ \\
-\ \\
-\ \\
-\ \\
-\ \\
 
-{\Large\bf Seminární práce}
+{\Large\bf Středoškolská odborná činnost 2008/2009}\\
+{\Large Obor: 18. Informatika}
 
-\vspace{10mm}
+\vspace{35mm}
 
 {\Huge\bf Nasazení IPv6 v praxi}\\
 
@@ -53,10 +50,13 @@
 \vspace{\fill}
 
 {\large
-\noindent Gymnázium Třebíč\\
-\noindent Michal Zima, 4.B\\
-\noindent Třebíč 2009\\
-\noindent Vedoucí práce: Pavel Šimerda\\
+\noindent Autor: Michal Zima, 4.B\\
+\noindent Škola: Gymnázium Třebíč\\
+\indent\indent ~~Masarykovo nám. 9/116\\
+\indent\indent ~~674 01~~Třebíč\\
+\noindent Kraj: Vysočina\\
+\\
+\noindent Konzultant práce: Pavel Šimerda\\
 }
 
 \end{titlepage}
@@ -64,7 +64,7 @@
 
 % prohlášení, místo a datum
 \thispagestyle{empty}
-Prohlašuji, že jsem svou seminární práci napsal samostatně a výhradně s použitím citovaných pramenů. Souhlasím se zapůjčováním práce a jejím zveřejňováním v souladu s licencí Creative Commons Attribution-Share Alike.
+Prohlašuji, že jsem svou práci napsal samostatně a výhradně s použitím citovaných pramenů. Souhlasím se zapůjčováním práce a jejím zveřejňováním v souladu s licencí Creative Commons Attribution-Share Alike.
 
 \bigskip	% vynechá řádek
 \noindent V Třebíči dne \today \hspace{\fill}Michal Zima
@@ -77,7 +77,7 @@ Prohlašuji, že jsem svou seminární práci napsal samostatně a výhradně s 
 \section*{Nasazení IPv6 v praxi\\Implementation of IPv6 in use}
 
 \subsection*{Anotace}
-Seminární práce se zabývá problematikou nasazení technologie IPv6 do reálného prostředí tak, aby se eliminovalo použití staré technologie IPv4 uvnitř malých sítí. Cílem je usnadnit pozdější přechod celosvětového Internetu na tuto novou technologii.
+Práce se zabývá problematikou nasazení technologie IPv6 do reálného prostředí tak, aby se eliminovalo použití staré technologie IPv4 uvnitř malých sítí. Cílem je usnadnit pozdější přechod celosvětového Internetu na tuto novou technologii.
 
 \subsection*{Anotation}
 Abstract paper deals with IPv6 technology deployment strategy into real environment so that the use of old IPv4 technology is eliminated. The goal is to make further transformation of worldwide Internet to this new technology easier.
@@ -100,11 +100,18 @@ Internet, IPv4, IPv6, NAT, IP Masquerading, TCP, UDP, ICMP, tunneling, WrapSix, 
 \kapitola{Úvod}
 Všechno na světě se vyvíjí a nejinak je tomu s počítačovými technologiemi -- konkrétně tedy se sítěmi a Internetem. Přenosové rychlosti úspěšně rostou, množství přenesených dat též. S tím souvisí i nárůst počtu připojených serverů a klientů do této sítě. Jenže servery potřebují \uv{být vidět}. Řada klientů zase chce \uv{být vidět}. Musí tedy mít veřejně routovatelnou IP adresu. Protokol IP ve verzi 4 má své mantinely ve formě 32 bitů, a přes ty se již nelze znovu přehoupnout (poprvé to bylo učiněno maškarádou, ale pouze za předpokladu, že klienti, kteří za ní budou schovaní, nebudou chtít být vidět), a proto na ně pomalu začínáme narážet. Řešením je pouze přechod na novou verzi IP protokolu, a to na verzi 6.
 
+\section*{Co to je IPv6}
+\textit{IP} znamená Internetový Protokol, \textit{v} zkracuje verzi a \textit{6} označuje šestou verzi tohoto protokolu. Předchůdkyní byla verze 4, na které byl prakticky celý Internet vybudován. Vyznačuje se IP adresami ve tvaru čtyř čísel 0-255 oddělených tečkami, např. \textit{127.0.0.1}. Z~toho vyplývá $2^{32}$ možných kombinací. Počítačů je však na světě mnohem více a adresy i~přes úsporná opatření docházejí. IPv6 adresy se naopak zapisují v trošku složitějším tvaru~-- tvoří je osm polí hexadecimálních čísel 0000-ffff (což v desítkovém tvaru znamená 0-65536) oddělených dvojtečkami, např. \textit{2001:0db8:85a3:08d3:1319:8a2e:0370:7344}, přičemž existují pravidla, podle nichž lze adresy zkracovat, aby se jejich zápis zjednodušil. V tomto případě je již počet všech možných kombinací $2^{128}$, což je již znatelně více.
+
+Jak jsem již zmínil IP protokol slouží k organizaci Internetu, aby všechna zařízení byla snadno dosažitelná. Všechny služby prakticky stojí především na protokolu IP a až v druhé řadě stojí jednotlivé protokoly obsluhující data. Například služba jako je web -- nejprve se přeloží doménové jméno na IP adresu a na ni se poté odešlou příslušná data zahrnující požadavek na zobrazení konkrétní webové stránky. Nebýt IP adresy, tak by počítač nevěděl, na který server daný požadavek poslat.
+
+\section*{Vznik IPv6}
 IPv6 je na světě již poměrně dlouho -- první koncepty se objevily již v devadesátých letech, ale přesto je jeho produkční nasazení zatím spíše ojedinělé, příp. se jedná o paralelní nasazení současně s IPv4. Přitom situace ve světě IPv4 není zrovna růžová -- nyní, na počátku roku 2009, nám zbývá již jen něco kolem půl miliardy volných IPv4 adres. A víc jich nebude -- budou již jen ubývat. Je možné předpokládat, že čím méně jich bude, tím více se budou společnosti snažit jich co nejvíce získat. Efekt davové paniky.
 
+\section*{Nutnost přejít}
 Je potřeba zajistit, aby lidé začali přecházet -- čím dříve, tím lépe. I kdyby nasazovali IPv6 pouze jako technologii doplňující stávající IPv4, byl by to pokrok. Ovšem stále by správci sítí museli udržovat a spravovat staré IPv4, takže by si práci neušetřili, ba naopak by jim práce přibylo zhruba dvojnásobně. U velkých sítích tedy nelze hledat řešení v této cestě. Je potřeba nasadit čisté IPv6 se vším, co přináší, a využít tak všech jeho výhod naplno. Je samozřejmé, že je potřeba ještě nějaký čas zajišťovat klientům přístup do IPv4 Internetu, takže celý přechod nebude zas až tak jednoduchý. Ovšem jde to, a to je to hlavní, a proto nám již nic nebrání IPv6 plně nasadit.
 
-IPv6 je velkou výzvou, a proto jsem se rozhodl tento nový protokol v domácí síti nasadit. A to bez sekundance staré IPv4. Ačkoliv by se to na první pohled mohlo jevit jako velmi snadný úkol, nebylo to tak docela triviální. Veškeré své postřehy, nabyté zkušenosti i řešení nastalých problémů shrnuji v této seminární práci.
+IPv6 je velkou výzvou, a proto jsem se rozhodl tento nový protokol v domácí síti nasadit. A to bez sekundance staré IPv4. Ačkoliv by se to na první pohled mohlo jevit jako velmi snadný úkol, nebylo to tak docela triviální. Veškeré své postřehy, nabyté zkušenosti i řešení nastalých problémů shrnuji v této práci.
 \newpage{}
 
 \kapitola{Výhody a nevýhody IPv6}
@@ -226,6 +233,30 @@ Alternativou k mému řešení je například dvojice \textit{pTRTd} a \textit{t
 
 \section{Nepokryté oblasti}
 Přesto toto řešení ještě není kompletní. Řada aplikací, ale především her, se připojuje přímo na IPv4 adresy serverů -- vynechává tedy mezikrok překladu doménového jména. Zatím tato oblast zůstává otevřená, ale brzy i ji WrapSix zaplní a vytvoří tak kompletní řešení pro každého (vzhledem k jeho svobodné open-source licenci).
+\newpage{}
+
+\kapitola{Vývoj a nasazení WrapSixu}
+\section{Předpoklady}
+Abych mohl vůbec WrapSix naprogramovat, musel jsem si přesně rozvrhnout, jak chci, aby fungoval a co přesně by měl dělat. V prvé řadě jsem potřeboval server, který se bude chovat jako DNS a bude poskytovat IPv6 adresy i tam, kde neexistují, ale přitom nebude nijak negativně ovlivňovat pro něj nerelevantní dotazy. V druhé fázi byl potřeba server, který by naslouchal na $2^{32}$ IPv6 adres, které představují celý adresní prostor IPv4 Internetu.
+
+\section{Počáteční rozhodnutí}
+Rozhodl jsem se WrapSix naprogramovat v jazyku Ruby, jelikož se mi v něm dosud programovalo velmi snadno a rychle. Základ a část obsluhující DNS je v tomto jazyku napsána, ale vlastní \uv{překládací} část jsem již napsal v jazyce C, neboť je pro toto nasazení mnohem lépe uzpůsoben a práce s binárními strukturami je mnohem rychlejší a pohodlnější. V budoucnosti proto přepíši i zbytek WrapSixu do tohoto jazyka, což navíc umožní i portaci programu na další systémy, vč. embedded zařízení.
+
+Dalším důležitým rozhodnutím bylo, jak bude překladač pracovat. Jednou z možností by bylo chovat se jako neomezené množství IPv6 serverů poskytujících služby svých IPv4 protějšků. Jinak řečeno by s ním navazovali klienti spojení a on by poté navázal spojení s~IPv4 serverem a \uv{přeposkytovával} by tak danou službu. Já zvolil cestu čistého překladu -- každý paket vezmu, z původní IPv6 hlavičky vezmu jen to nezbytně nutné (především pak IP adresu, ze které si dopočítám pravou IPv4 adresu) a data zabalím do IPv4 paketu. A~případnou odpověď zase z původního IPv4 paketu zabalím do nového IPv6. Navíc, abych toto mohl uskutečnit, tak si musím vést tabulku existujících spojení. Jinak řečeno, implementuji tak mechanismus typu NAT.
+
+\section{Problémy s vývojem}
+Během vývoje jsem narazil na několik obtíží. Tou hlavní byl protokol TCP a jeho interakce s linuxovým systémem. WrapSix totiž využívá techniky pasivního odposlechu provozu na rozhraní a posléze surového odesílání vlastních paketů. U ICMP i UDP protokolů nebyl nejmenší problém s implementací. Když ovšem půjdu do hloubky u TCP, které je orientováno na spojení, zjistím, že jeho provoz nelze pasivně odposlouchávat, protože cílový systém, na kterém WrapSix běží, musí nějakým způsobem s pakety naložit. Jelikož ovšem o odposlechu WrapSixu nemá nejmenší zprávy, nemá které aplikaci TCP paket doručit, a proto toto spojení odmítne, a WrapSixu uzavře cestu pro další komunikaci. Tento problém jsem vyřešil dedikování jedné IPv4 adresy WrapSixu čistě pro tyto účely. Tato IP adresa není přiřazena žádnému systému, a proto se k jejím paketům nikdo nehlásí a ignorují je -- poslouchá je však WrapSix, který se o ně upomíná prostřednictvím protokolu ARP.
+
+\section{Proces reálného nasazení}
+WrapSix jsem nejen vyvinul, ale také i experimenálně nasadil v prostředí naší domácí sítě. Ověřil jsem si při tom, že čisté IPv6 sítě zvládají běžné systémy typu BSD či Linux, ale Windows teprve od verze Vista, což bude v budoucnu pro mnoho lidí, kteří nebudou chtít opustit zažité Windows XP, velmi problematické.
+
+\section{Potřebné zásahy v síti}
+V naší síti se vyskytuje pouze jeden router, a to hraniční, na němž je nakonfigurován tunel od \textit{TunnelBroker.net}, ze kterého se automaticky (prostřednictvím NDP paketů typu Router Advertisement -- tedy autokonfigurace klientů) přidělují adresy jednotlivým počítačům. Pokud by v síti existovalo více routerů, musely by nutně podporovat IPv6, což dnes stále ještě není tak docela samozřejmost.
+
+Příslušný DNS server (jehož místo zaujímal WrapSix) bylo potřeba na klientech nastavit ručně (toto by šlo řešit přidáním DHCPv6 serveru do sítě).
+
+\section{Výsledek}
+Po dokončení konfigurace a spuštění WrapSixu jsem provedl třídenní testovací provoz. Musím říci, že vše fungovalo podle očekávání a nevyskytly se žádné problémy. Za předpokladu snížení výpočetních nároků WrapSixu a především odstranění jeho vazby na jazyk Ruby by bylo možné i jeho reálné nasazení do provozu, aniž by byla ohrožena stabilita sítě.
 \newpage{}
 
 \kapitola{Závěr}
